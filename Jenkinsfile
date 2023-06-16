@@ -1,12 +1,14 @@
 node {
+  def workspaceDir = pwd() 
+
   docker.image('node:16-buster-slim').inside('-p 3000:3000') {
     stage('Build') {
-      dir('submission-cicd-pipeline-kasyfil') {
+      dir(workspaceDir) {
         sh 'npm install'
       }
     }
     stage('Test') {
-      dir('submission-cicd-pipeline-kasyfil') {
+      dir(workspaceDir) {
         sh './jenkins/scripts/test.sh'
       }
     }
