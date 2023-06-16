@@ -1,16 +1,10 @@
 node {
-  def workspaceDir = pwd() 
-
   docker.image('node:16-buster-slim').inside('-p 3000:3000') {
     stage('Build') {
-      dir(workspaceDir) {
-        sh 'npm install'
-      }
+      sh 'npm install'
     }
     stage('Test') {
-      dir(workspaceDir) {
-        sh './jenkins/scripts/test.sh'
-      }
+      sh './jenkins/scripts/test.sh' 
     }
   }
 }
