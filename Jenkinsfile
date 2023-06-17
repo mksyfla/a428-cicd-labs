@@ -7,8 +7,9 @@ node {
       sh './jenkins/scripts/test.sh' 
     }
     stage('Deploy') {
+      input message: 'Lanjutkan ke tahap Deploy? (Klik "proceed" untuk mengakhiri)'
       sh './jenkins/scripts/deliver.sh'
-      input message: 'Sudah selesai menggunakan React App? (Klik "proceed" untuk mengakhiri)'
+      sleep(time: 1, unit: 'MINUTES')
       sh './jenkins/scripts/kill.sh'
     }
   }
@@ -34,8 +35,9 @@ node {
 //     }
 //     stage('Deploy') {
 //       steps {
+//         input message: 'Lanjutkan ke tahap Deploy? (Klik "proceed" untuk mengakhiri)'
 //         sh './jenkins/scripts/deliver.sh'
-//         input message: 'Sudah selesai menggunakan React App? (Klik "proceed" untuk mengakhiri)'
+//         sleep(time: 1, unit: 'MINUTES')
 //         sh './jenkins/scripts/kill.sh'
 //       }
 //     }
