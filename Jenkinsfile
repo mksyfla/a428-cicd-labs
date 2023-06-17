@@ -6,6 +6,9 @@ node {
     stage('Test') {
       sh './jenkins/scripts/test.sh' 
     }
+    triggers {
+      pollSCM('H/2 * * * *')
+    }
   }
 }
 
