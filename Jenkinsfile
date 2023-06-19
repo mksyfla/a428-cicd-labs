@@ -9,7 +9,7 @@ node {
     stage('Deploy') {
       input message: 'Lanjutkan ke tahap Deploy?'
       
-      withCredentials([sshUserPrivateKey(credentialsId: '<credentials_id>', keyFileVariable: 'KEY_FILE')]) {
+      withCredentials([sshUserPrivateKey(credentialsId: '05f2f461-d8f1-415e-9c20-be77df479fb6', keyFileVariable: 'KEY_FILE')]) {
         def ec2Username = 'ec2-user'
         def ec2PublicIp = 'ec2-54-255-170-104.ap-southeast-1.compute.amazonaws.com'
         def dockerCommand = "docker stop my-app || true && docker rm my-app || true && docker run -d -p 3000:3000 --name my-app node:16-buster-slim"
