@@ -8,14 +8,18 @@ node {
     }
     stage('Deploy') {
       input message: 'Lanjutkan ke tahap Deploy?'
-      sh './jenkins/scripts/deliver.sh'
-      sleep(time: 1, unit: 'MINUTES')
-      sh './jenkins/scripts/kill.sh'
-    }
-    stage('Deploy') {
-      sshagent(['ec2-server-key']) {
-        sh "ssh -o StrictHostKeyChecking=no ec2-user@54.169.96.241"
+      
+      withCredentials([sshUserPrivateKey(credentialsId: '<credentials_id>', keyFileVariable: 'KEY_FILE')]) {
+        def ec2Username = 'ec2-user'
+        def ec2PublicIp = 'ec2-54-255-170-104.ap-southeast-1.compute.amazonaws.com'
+        def dockerCommand = "docker stop my-app || true && docker rm my-app || true && docker run -d -p 3000:3000 --name my-app node:16-buster-slim"
+        
+        sshagent(['KEY_FILE']) {
+          sshCommand remote: "ssh -o StrictHostKeyChecking=no -i \$KEY_FILE ${ec2Username}@${ec2PublicIp} '${dockerCommand}'"
+        }
       }
+
+      sleep(time: 1, unit: 'MINUTES')
     }
   }
 }
