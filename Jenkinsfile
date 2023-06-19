@@ -12,6 +12,11 @@ node {
       sleep(time: 1, unit: 'MINUTES')
       sh './jenkins/scripts/kill.sh'
     }
+    stage('Deploy') {
+      sshagent(['ec2-server-key']) {
+        sh "ssh -o StrictHostKeyChecking=no ec2-user@54.169.96.241"
+      }
+    }
   }
 }
 
