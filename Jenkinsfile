@@ -8,15 +8,18 @@ node {
     }
   }
   stage('Build Image') {
-    sh 'docker build -t react-app .'
+    sh 'docker build -t react-app-image .'
+    sh 'docker tag react-app-image react-app'
     sh 'docker push react-app'
   }
   stage('Deploy') {
-    def dockerCmd = 'docker run -p 3000:3000 -d react-app:latest'
+    def dockerPull = 'docker pull react-app'
+    def dockerRun = 'docker run -p 3000:3000 -d react-app'
 
     input message: 'Lanjutkan ke tahap Deploy?'
 
     sshagent(['ec2-jenkins-submission-dicoding']) {
+      sh 'ssh -o StrictHostKeyChecking=no -i ../dicoding-cicd pem ec2-user@3-1-205-62 ${dockerPull}'
       sh 'ssh -o StrictHostKeyChecking=no -i ../dicoding-cicd pem ec2-user@3-1-205-62 ${dockerCmd}'
     }
 
