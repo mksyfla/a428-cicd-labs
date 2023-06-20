@@ -9,7 +9,7 @@ node {
   }
 
   stage('Build Image') {
-    sh 'docker build -f Dockerfile -t react-app-image .'
+    sh 'docker build -f ./Dockerfile -t react-app-image .'
     sh 'docker tag react-app-image react-app'
     sh 'docker push react-app:latest'
   }
