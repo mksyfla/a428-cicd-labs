@@ -6,18 +6,11 @@ node {
     stage('Test') {
       sh './jenkins/scripts/test.sh' 
     }
-    stage('Connect to EC2') {
-      sh "ssh -o StrictHostKeyChecking=no ec2-user@ec2-18-136-124-35 ap-southeast-1.compute.amazonaws.com 'echo Connected to EC2'"
-    }
-    stage('Build image') {
-      sh 'sudo docker build -t simple-app'
-      sh 'sudo docker push simple-app'
-    }
     stage('Deploy') {
-      def dockerCmd = 'sudo docker run -p 3000:3000 -d simple-app:latest'
       input message: 'Lanjutkan ke tahap Deploy?'
-      sh "ssh -o StrictHostKeyChecking=no ec2-user@ec2-18-136-124-35.ap-southeast-1.compute.amazonaws.com ${dockerCmd}"
+      sh './jenkins/scripts/deliver.sh'
       sleep(time: 1, unit: 'MINUTES')
+      sh './jenkins/scripts/kill.sh'
     }
   }
 }
