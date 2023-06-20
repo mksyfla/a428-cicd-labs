@@ -6,19 +6,14 @@ node {
     stage('Test') {
       sh './jenkins/scripts/test.sh' 
     }
+    stage('Build image') {
+      sh 'docker build -t simple-app'
+      sh 'docker push simple-app'
+    }
     stage('Deploy') {
+      def dockerCmd = 'docker run -p 3000:3000 -d simple-app:latest'
       input message: 'Lanjutkan ke tahap Deploy?'
-      
-      withCredentials([sshUserPrivateKey(credentialsId: '05f2f461-d8f1-415e-9c20-be77df479fb6', keyFileVariable: 'KEY_FILE')]) {
-        def ec2Username = 'ec2-user'
-        def ec2PublicIp = 'ec2-54-255-170-104.ap-southeast-1.compute.amazonaws.com'
-        def dockerCommand = "docker stop my-app || true && docker rm my-app || true && docker run -d -p 3000:3000 --name my-app node:16-buster-slim"
-        
-        sshagent(['KEY_FILE']) {
-          sshCommand remote: "ssh -o StrictHostKeyChecking=no -i \$KEY_FILE ${ec2Username}@${ec2PublicIp} '${dockerCommand}'"
-        }
-      }
-
+      sh "ssh -o StrictHostKeyChecking=no ec2-user@ec2-18-136-124-35.ap-southeast-1.compute.amazonaws.com ${dockerCmd}"
       sleep(time: 1, unit: 'MINUTES')
     }
   }
