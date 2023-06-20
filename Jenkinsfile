@@ -7,10 +7,8 @@ node {
       sh './jenkins/scripts/test.sh' 
     }
     stage('Build Image') {
-      withCredentials([usernamePassword]) {
-        sh 'docker build -t react-app .'
-        sh 'docker push react-app'
-      }
+      sh 'docker build -t react-app .'
+      sh 'docker push react-app'
     }
     stage('Deploy') {
       def dockerCmd = 'docker run -p 3000:3000 -d react-app:latest'
