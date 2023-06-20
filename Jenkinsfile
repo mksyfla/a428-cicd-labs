@@ -6,9 +6,21 @@ node {
     stage('Test') {
       sh './jenkins/scripts/test.sh' 
     }
+    stage('Build Image') {
+      withCredentials([usernamePassword]) {
+        sh 'docker build -t react-app .'
+        sh 'docker push react-app'
+      }
+    }
     stage('Deploy') {
+      def dockerCmd = 'docker run -p 3000:3000 -d react-app:latest'
+
       input message: 'Lanjutkan ke tahap Deploy?'
-      sh './jenkins/scripts/deliver.sh'
+
+      sshagent(['ec2-jenkins-submission-dicoding']) {
+        sh 'ssh -o StrictHostKeyChecking=no -i ../dicoding-cicd.pem ec2-user@3-1-205-62 ${dockerCmd}'
+      }
+
       sleep(time: 1, unit: 'MINUTES')
     }
   }
