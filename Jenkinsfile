@@ -6,6 +6,9 @@ node {
     stage('Test') {
       sh './jenkins/scripts/test.sh' 
     }
+    stage('Connect to EC2') {
+      sh "ssh -o StrictHostKeyChecking=no ec2-user@ec2-18-136-124-35 ap-southeast-1.compute.amazonaws.com 'echo Connected to EC2'"
+    }
     stage('Build image') {
       sh 'docker build -t simple-app'
       sh 'docker push simple-app'
