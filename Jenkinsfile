@@ -10,11 +10,11 @@ node {
       sh "ssh -o StrictHostKeyChecking=no ec2-user@ec2-18-136-124-35 ap-southeast-1.compute.amazonaws.com 'echo Connected to EC2'"
     }
     stage('Build image') {
-      sh 'docker build -t simple-app'
-      sh 'docker push simple-app'
+      sh 'sudo docker build -t simple-app'
+      sh 'sudo docker push simple-app'
     }
     stage('Deploy') {
-      def dockerCmd = 'docker run -p 3000:3000 -d simple-app:latest'
+      def dockerCmd = 'sudo docker run -p 3000:3000 -d simple-app:latest'
       input message: 'Lanjutkan ke tahap Deploy?'
       sh "ssh -o StrictHostKeyChecking=no ec2-user@ec2-18-136-124-35.ap-southeast-1.compute.amazonaws.com ${dockerCmd}"
       sleep(time: 1, unit: 'MINUTES')
