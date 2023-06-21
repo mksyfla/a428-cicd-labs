@@ -7,6 +7,10 @@ node {
       sh './jenkins/scripts/test.sh' 
     }
 
+    stage('Checkout') {
+      checkout scm
+    }
+
     stage('Build Image') {
       withCredentials([usernamePassword(
         credentialsId: 'docker-hub-mksyfla',
@@ -14,9 +18,9 @@ node {
         passwordVariable: 'PASSWORD'
       )]) {
         sh 'docker login -u $USER -p $PASSWORD'
-        sh 'docker build -t react-app .'
+        sh 'docker build -t react-app -f Dockerfile .'
         sh 'docker tag react-app $USER/react-app'
-        sh 'docker push $USER/react-app'
+        sh 'docker push react-app'
       }
     }
 
