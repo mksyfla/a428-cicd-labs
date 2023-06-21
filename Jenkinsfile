@@ -10,6 +10,7 @@ node {
   }
 
   stage('Build Image') {
+    sh 'pwd'
     sh 'ls'
     sh 'docker info'
     // sh 'docker build -t react-app .'
