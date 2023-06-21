@@ -10,6 +10,7 @@ node {
   }
 
   stage('Build Image') {
+    sh 'git ls-files'
     sh 'pwd'
     sh 'ls'
     sh 'docker info'
