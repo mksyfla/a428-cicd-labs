@@ -7,30 +7,29 @@ node {
       sh './jenkins/scripts/test.sh' 
     }
 
-  }
-
-  stage('Build Image') {
-    withCredentials([usernamePassword(
-      credentialsId: 'docker-hub-mksyfla',
-      usernameVariable: 'USER',
-      passwordVariable: 'PASSWORD'
-    )]) {
-      sh 'docker login -u $USER -p $PASSWORD'
-      sh 'docker build -t react-app .'
-      sh 'docker tag react-app $USER/react-app'
-      sh 'docker push $USER/react-app'
-    }
-  }
-
-  stage('Deploy') {
-    input message: 'Lanjutkan ke tahap Deploy?'
-
-    sshagent(['ec2-server-key']) {
-      // sh "ssh -o StrictHostKeyChecking=no -i ../dicoding-cicd.pem ec2-user@52.221.214.181 'sudo docker pull mksyfla/react-app'"
-      sh "ssh -o StrictHostKeyChecking=no -i ../dicoding-cicd.pem ec2-user@52.221.214.181 'sudo docker run -p 3000:3000 -d mksyfla/react-app'"
+    stage('Build Image') {
+      withCredentials([usernamePassword(
+        credentialsId: 'docker-hub-mksyfla',
+        usernameVariable: 'USER',
+        passwordVariable: 'PASSWORD'
+      )]) {
+        sh 'docker login -u $USER -p $PASSWORD'
+        sh 'docker build -t react-app .'
+        sh 'docker tag react-app $USER/react-app'
+        sh 'docker push $USER/react-app'
+      }
     }
 
-    sleep(time: 1, unit: 'MINUTES')
+    stage('Deploy') {
+      input message: 'Lanjutkan ke tahap Deploy?'
+
+      sshagent(['ec2-server-key']) {
+        // sh "ssh -o StrictHostKeyChecking=no -i ../dicoding-cicd.pem ec2-user@52.221.214.181 'sudo docker pull mksyfla/react-app'"
+        sh "ssh -o StrictHostKeyChecking=no -i ../dicoding-cicd.pem ec2-user@52.221.214.181 'sudo docker run -p 3000:3000 -d mksyfla/react-app'"
+      }
+
+      sleep(time: 1, unit: 'MINUTES')
+    }
   }
 }
 
