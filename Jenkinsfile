@@ -10,16 +10,17 @@ node {
   }
 
   stage('Build Image') {
-    sh 'docker build -t react-app .'
-    withCredentials([usernamePassword(
-      credentialsId: 'docker-hub-mksyfla',
-      usernameVariable: 'USER',
-      passwordVariable: 'PASSWORD'
-    )]) {
-      sh 'docker login -u $USER -p $PASSWORD'
-      sh 'docker tag react-app $USER/react-app'
-      sh 'docker push $USER/react-app'
-    }
+    sh 'ls'
+    // sh 'docker build -t react-app .'
+    // withCredentials([usernamePassword(
+    //   credentialsId: 'docker-hub-mksyfla',
+    //   usernameVariable: 'USER',
+    //   passwordVariable: 'PASSWORD'
+    // )]) {
+    //   sh 'docker login -u $USER -p $PASSWORD'
+    //   sh 'docker tag react-app $USER/react-app'
+    //   sh 'docker push $USER/react-app'
+    // }
   }
 
   stage('Deploy') {
