@@ -10,17 +10,12 @@ node {
   }
 
   stage('Build Image') {
-    // sh 'cat .gitignore'
-    // sh 'git ls-files'
-    // sh 'pwd'
-    // sh 'ls'
-    // sh 'docker info'
-    sh 'docker build -t react-app .'
     withCredentials([usernamePassword(
       credentialsId: 'docker-hub-mksyfla',
       usernameVariable: 'USER',
       passwordVariable: 'PASSWORD'
     )]) {
+      sh 'docker build -t react-app .'
       sh 'docker login -u $USER -p $PASSWORD'
       sh 'docker tag react-app $USER/react-app'
       sh 'docker push $USER/react-app'
