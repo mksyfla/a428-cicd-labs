@@ -30,7 +30,7 @@ node {
 
       sshagent(['ec2-server-key']) {
         // sh "ssh -o StrictHostKeyChecking=no -i ../dicoding-cicd.pem ec2-user@52.221.214.181 'sudo docker pull mksyfla/react-app'"
-        sh "ssh -o StrictHostKeyChecking=no -i ../dicoding-cicd.pem ec2-user@52.221.214.181 'sudo docker run -p 3000:3000 -d mksyfla/react-app'"
+        sh "ssh -o StrictHostKeyChecking=no ec2-user@52.221.214.181 'sudo docker run -p 3000:3000 -d mksyfla/react-app'"
       }
 
       sleep(time: 1, unit: 'MINUTES')
