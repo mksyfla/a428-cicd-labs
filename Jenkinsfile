@@ -15,7 +15,7 @@ node {
     // sh 'pwd'
     // sh 'ls'
     // sh 'docker info'
-    sh 'docker build -f Dockerfile -t react-app .'
+    sh 'docker build -t react-app .'
     withCredentials([usernamePassword(
       credentialsId: 'docker-hub-mksyfla',
       usernameVariable: 'USER',
