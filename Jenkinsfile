@@ -14,8 +14,7 @@ node {
     // sh 'git ls-files'
     // sh 'pwd'
     // sh 'ls'
-    sh 'cat .dockerignore'
-    sh 'docker info'
+    // sh 'docker info'
     sh 'docker build -f Dockerfile -t react-app .'
     withCredentials([usernamePassword(
       credentialsId: 'docker-hub-mksyfla',
