@@ -10,6 +10,7 @@ node {
   }
 
   stage('Build Image') {
+    sh 'ls /var/lib/docker/tmp/'
     withCredentials([usernamePassword(
       credentialsId: 'docker-hub-mksyfla',
       usernameVariable: 'USER',
