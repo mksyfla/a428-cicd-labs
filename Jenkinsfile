@@ -6,6 +6,7 @@ node {
     stage('Test') {
       sh './jenkins/scripts/test.sh' 
     }
+  }
 
     stage('Checkout') {
       checkout scm
@@ -34,7 +35,6 @@ node {
 
       sleep(time: 1, unit: 'MINUTES')
     }
-  }
 }
 
 // pipeline {
