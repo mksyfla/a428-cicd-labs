@@ -10,6 +10,7 @@ node {
   }
 
   stage('Build Image') {
+    sh 'cat .gitignore'
     sh 'git ls-files'
     sh 'pwd'
     sh 'ls'
