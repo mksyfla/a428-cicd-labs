@@ -12,6 +12,10 @@ node {
     checkout scm
   }
 
+  stage('Manual Approval') {
+    input message: 'Lanjutkan ke tahap Deploy?'
+  }
+
   stage('Build Image') {
     withCredentials([usernamePassword(
       credentialsId: 'docker-hub-mksyfla',
