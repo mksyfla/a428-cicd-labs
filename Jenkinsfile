@@ -20,7 +20,7 @@ node {
     )]) {
       sh 'docker login -u $USER -p $PASSWORD'
       sh 'docker build -t react-app -f Dockerfile .'
-      sh 'docker tag react-app $USER/react-app'
+      sh 'docker tag react-app:latest $USER/react-app'
       sh 'docker push $USER/react-app'
     }
   }
@@ -30,7 +30,7 @@ node {
 
     sshagent(['ec2-server-key']) {
       // sh "ssh -o StrictHostKeyChecking=no ec2-user@13.215.248.81 'sudo docker pull mksyfla/react-app'"
-      sh "ssh -o StrictHostKeyChecking=no ec2-user@13.215.248.81 'sudo docker run -p 3000:3000 -d mksyfla/react-app'"
+      sh "ssh -o StrictHostKeyChecking=no ec2-user@13.215.248.81 'sudo docker run -p 3000:3000 -d mksyfla/react-app:latest'"
     }
 
     sleep(time: 1, unit: 'MINUTES')
