@@ -28,9 +28,13 @@ node {
   stage('Deploy') {
     input message: 'Lanjutkan ke tahap Deploy?'
 
+    withCredentials([sshUserPrivateKey(
+      credentialsId: 'ec2-server-key',
+      keyFileVariable: 'SSH_PRIVATE_KEY'
+    )])
     sshagent(['ec2-server-key']) {
       // sh "ssh -o StrictHostKeyChecking=no ec2-user@13.215.248.81 'sudo docker pull mksyfla/react-app'"
-      sh "ssh -o StrictHostKeyChecking=no ec2-user@13.215.248.81 'sudo docker run -p 3000:3000 -d mksyfla/react-app:latest'"
+      sh "ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY ec2-user@13.215.248.81 'sudo docker run -p 3000:3000 -d mksyfla/react-app:latest'"
     }
 
     sleep(time: 1, unit: 'MINUTES')
