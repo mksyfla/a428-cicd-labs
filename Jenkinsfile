@@ -31,7 +31,7 @@ node {
       credentialsId: 'ec2-server-key',
       keyFileVariable: 'KEYFILE',
     )]) {
-      // sh "ssh -o StrictHostKeyChecking=no -i $KEYFILE ubuntu@ec2-13-215-248-81.ap-southeast-1.compute.amazonaws.com 'sudo docker pull mksyfla/react-app:latest'"
+      sh "ssh -o StrictHostKeyChecking=no -i $KEYFILE ubuntu@ec2-13-215-248-81.ap-southeast-1.compute.amazonaws.com 'sudo docker pull mksyfla/react-app:latest'"
       sh "ssh -o StrictHostKeyChecking=no -i $KEYFILE ubuntu@ec2-13-215-248-81.ap-southeast-1.compute.amazonaws.com 'sudo docker run -p 3000:3000 -d mksyfla/react-app:latest'"
     }
     sleep(time: 1, unit: 'MINUTES')
