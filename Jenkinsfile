@@ -28,8 +28,8 @@ node {
   stage('Deploy') {
     input message: 'Lanjutkan ke tahap Deploy?'
     sshagent(['ec2-server-key']) {
-      sh "ssh -o StrictHostKeyChecking=no -i ec2-user@13.215.248.81 'sudo docker pull mksyfla/react-app:latest'"
-      sh "ssh -o StrictHostKeyChecking=no -i ec2-user@13.215.248.81 'sudo docker run -p 3000:3000 -d mksyfla/react-app:latest'"
+      sh "ssh -o StrictHostKeyChecking=no -i ec2-user@ec2-13-215-248-81.ap-southeast-1.compute.amazonaws.com 'sudo docker pull mksyfla/react-app:latest'"
+      sh "ssh -o StrictHostKeyChecking=no -i ec2-user@ec2-13-215-248-81.ap-southeast-1.compute.amazonaws.com 'sudo docker run -p 3000:3000 -d mksyfla/react-app:latest'"
     }
     sleep(time: 1, unit: 'MINUTES')
   }
