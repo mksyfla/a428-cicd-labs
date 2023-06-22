@@ -8,33 +8,33 @@ node {
     }
   }
 
-    stage('Checkout') {
-      checkout scm
+  stage('Checkout') {
+    checkout scm
+  }
+
+  stage('Build Image') {
+    withCredentials([usernamePassword(
+      credentialsId: 'docker-hub-mksyfla',
+      usernameVariable: 'USER',
+      passwordVariable: 'PASSWORD'
+    )]) {
+      sh 'docker login -u $USER -p $PASSWORD'
+      sh 'docker build -t react-app -f Dockerfile .'
+      sh 'docker tag react-app $USER/react-app'
+      sh 'docker push $USER/react-app'
+    }
+  }
+
+  stage('Deploy') {
+    input message: 'Lanjutkan ke tahap Deploy?'
+
+    sshagent(['ec2-server-key']) {
+      // sh "ssh -o StrictHostKeyChecking=no ec2-user@13.215.248.81 'sudo docker pull mksyfla/react-app'"
+      sh "ssh -o StrictHostKeyChecking=no ec2-user@13.215.248.81 'sudo docker run -p 3000:3000 -d mksyfla/react-app'"
     }
 
-    stage('Build Image') {
-      withCredentials([usernamePassword(
-        credentialsId: 'docker-hub-mksyfla',
-        usernameVariable: 'USER',
-        passwordVariable: 'PASSWORD'
-      )]) {
-        sh 'docker login -u $USER -p $PASSWORD'
-        sh 'docker build -t react-app -f Dockerfile .'
-        sh 'docker tag react-app $USER/react-app'
-        sh 'docker push react-app'
-      }
-    }
-
-    stage('Deploy') {
-      input message: 'Lanjutkan ke tahap Deploy?'
-
-      sshagent(['ec2-server-key']) {
-        // sh "ssh -o StrictHostKeyChecking=no ec2-user@13.215.248.81 'sudo docker pull mksyfla/react-app'"
-        sh "ssh -o StrictHostKeyChecking=no ec2-user@13.215.248.81 'sudo docker run -p 3000:3000 -d mksyfla/react-app'"
-      }
-
-      sleep(time: 1, unit: 'MINUTES')
-    }
+    sleep(time: 1, unit: 'MINUTES')
+  }
 }
 
 // pipeline {
